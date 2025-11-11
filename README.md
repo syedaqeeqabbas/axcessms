@@ -58,14 +58,38 @@ $checkout = Axcessms::copyAndPay()->singlePaymentCheckout([
 	            'merchantTransactionId' => rand(10000, 99999), // Replace it with real unique Order ID or Checkout ID
 	        ]); 
 
+// For single or one time payment using helper
+
+$checkout = copyAndPay()->singlePaymentCheckout([
+	            'amount' => 19.99,
+	            'currency' => 'GBP',
+	            'merchantTransactionId' => rand(10000, 99999), // Replace it with real unique Order ID or Checkout ID
+	        ]);
+
+// For schedule or recurring payment using Facade
+
+$checkout = Axcessms::copyAndPay()->schedulePaymentCheckout([
+	            'amount' => 19.99,
+	            'currency' => 'GBP',
+	            'merchantTransactionId' => rand(10000, 99999), // Replace it with real unique Order ID or Checkout ID
+	        ]); 
+
+// For schedule or recurring payment using helper
+
+$checkout = copyAndPay()->schedulePaymentCheckout([
+	            'amount' => 19.99,
+	            'currency' => 'GBP',
+	            'merchantTransactionId' => rand(10000, 99999), // Replace it with real unique Order ID or Checkout ID
+	        ]); 
+
 return view('checkout')->with(['checkoutId' => $checkout['id']]);
 ```
 
 Frontend:
 
-```php
+```html
 <form action="/payment/result" class="paymentWidgets" data-brands="VISA MASTER AMEX"></form>
-<script src="{{ Axcessms::getConfig()->baseUrl() }}/v1/paymentWidgets.js?checkoutId={{ $checkoutId }}" crossorigin="anonymous"></script>
+<script src="{{ Axcessms::config()->baseUrl() }}/v1/paymentWidgets.js?checkoutId={{ $checkoutId }}" crossorigin="anonymous"></script>
 <script>
     var wpwlOptions = {
         billingAddress: {},
@@ -73,4 +97,21 @@ Frontend:
         style: "card"
     }
 </script>
+```
+
+Check Payment Status:
+
+```php
+// Inside of your Controller on /payment/result route
+
+$response = Axcessms::copyAndPay()->status(request()->resourcePath);
+
+if ($response['status'])
+{
+	// Payment successfull
+}
+else
+{
+	// Payment failed
+}
 ```

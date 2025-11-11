@@ -56,7 +56,7 @@ class AxcessmsClient
      *
      * @return AxcessmsConfig
      */
-    public function getConfig(): AxcessmsConfig
+    public function config(): AxcessmsConfig
     {
         return $this->config;
     }
