@@ -30,10 +30,6 @@ php artisan vendor:publish --tag=axcessms
 Add credentials in your `.env` file:
 
 ```bash
-AXCESSMS_BASE_URL=https://api.axcessms.com
-AXCESSMS_ENTITY_ID=YOUR_ENTITY_ID
-AXCESSMS_ACCESS_TOKEN=YOUR_ACCESS_TOKEN
-AXCESSMS_TEST_MODE=true
 AXCESSMS_ENVIRONMENT=production // use sandbox for development or testing
 AXCESSMS_ENTITY_ID=YOUR_ENTITY_ID
 AXCESSMS_ACCESS_TOKEN=YOUR_ACCESS_TOKEN==
