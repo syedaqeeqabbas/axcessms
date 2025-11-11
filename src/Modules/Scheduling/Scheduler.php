@@ -59,10 +59,10 @@ class Scheduler
 
         try {
             $response = Http::asForm()
-                ->withHeaders([
-                    'Authorization' => 'Bearer ' . $this->config->getAccessToken(),
-                ])
-                ->post($this->config->baseUrl() . '/scheduling/v1/schedules', $params);
+                        ->withHeaders([
+                            'Authorization' => 'Bearer ' . $this->config->getAccessToken(),
+                        ])
+                        ->post($this->config->baseUrl() . '/scheduling/v1/schedules', $params);
 
             if ($response->successful() && $this->statusHandler->validate($response->json()['result']['code'])) {
                 return [
@@ -99,10 +99,8 @@ class Scheduler
     {
         try {
             $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $this->config->getAccessToken(),
-            ])->delete(
-                $this->config->baseUrl() . "/scheduling/v1/schedules/{$scheduleId}?entityId={$this->config->getEntityId()}"
-            );
+                            'Authorization' => 'Bearer ' . $this->config->getAccessToken(),
+                        ])->delete($this->config->baseUrl() . "/scheduling/v1/schedules/{$scheduleId}?entityId={$this->config->getEntityId()}");
 
             if ($response->successful() && $this->statusHandler->validate($response->json()['result']['code'])) {
                 return [

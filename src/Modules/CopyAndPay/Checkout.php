@@ -15,6 +15,7 @@ use SyedAqeeqAbbas\Axcessms\Core\StatusHandler;
  * This class provides methods for:
  *  - Creating new checkout sessions (single or recurring)
  *  - Checking the status of existing checkouts
+ *  - Registration
  *
  * @package SyedAqeeqAbbas\Axcessms\Modules\CopyAndPay
  */
@@ -29,8 +30,7 @@ class Checkout
     public function __construct(
         protected AxcessmsConfig $config,
         protected StatusHandler $statusHandler
-    ) {
-    }
+    ) {}
 
     /**
      * Retrieve the status of a checkout session.
@@ -146,6 +146,23 @@ class Checkout
         ], $params);
 
         $params['amount'] = 0;
+
+        return $this->create($params);
+    }
+
+    /**
+     * Provision a registration token for future payments.
+     *
+     * This method initiates a registration request with Axcess Merchant Services
+     * by automatically setting the `createRegistration` flag to `true`.
+     * It allows you to securely register a customer's payment details
+     * for later use in recurring or one-click transactions.
+     *
+     * @return array  Returns the API response structure.
+     */
+    public function registration()
+    {
+        $params = ['createRegistration' => 'true'];
 
         return $this->create($params);
     }

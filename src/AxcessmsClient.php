@@ -4,7 +4,8 @@ namespace SyedAqeeqAbbas\Axcessms;
 
 use SyedAqeeqAbbas\Axcessms\Config\AxcessmsConfig;
 use SyedAqeeqAbbas\Axcessms\Core\StatusHandler;
-use SyedAqeeqAbbas\Axcessms\Modules\CopyAndPay\Checkout as CopyAndPayCheckout;
+use SyedAqeeqAbbas\Axcessms\Modules\CopyAndPay\Checkout;
+use SyedAqeeqAbbas\Axcessms\Modules\ServerToServer\Payment;
 use SyedAqeeqAbbas\Axcessms\Modules\Scheduling\Scheduler;
 use SyedAqeeqAbbas\Axcessms\Modules\Scheduling\Canceller;
 use SyedAqeeqAbbas\Axcessms\Modules\Webhooks\WebhookHandler;
@@ -75,23 +76,23 @@ class AxcessmsClient
      *
      * Used to create checkout sessions for one-time or recurring payments.
      *
-     * @return CopyAndPayCheckout
+     * @return Checkout
      */
-    public function copyAndPayCheckout(): CopyAndPayCheckout
+    public function copyAndPay(): Checkout
     {
-        return new CopyAndPayCheckout($this->config, $this->statusHandler);
+        return new Checkout($this->config, $this->statusHandler);
     }
 
     /**
-     * Access the Copy & Pay Payment module.
+     * Access the Server to Server Payment module.
      *
      * Used to process payments directly or verify completed transactions.
      *
-     * @return CopyAndPayPayment
+     * @return Payment
      */
-    public function copyAndPayPayment(): CopyAndPayPayment
+    public function serverToServer(): Payment
     {
-        return new CopyAndPayPayment($this->config, $this->statusHandler);
+        return new Payment($this->config, $this->statusHandler);
     }
 
     /**

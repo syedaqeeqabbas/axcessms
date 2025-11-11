@@ -13,12 +13,6 @@ use SyedAqeeqAbbas\Axcessms\Config\AxcessmsConfig;
  * This class supports both JSON-wrapped and raw encrypted payloads, decrypting them
  * using the AES-256-GCM algorithm as required by Axcess.
  *
- * Example usage:
- *
- * ```php
- * Route::post('/webhook/axcess', [WebhookController::class, 'handle']);
- * ```
- *
  * @package SyedAqeeqAbbas\Axcessms\Modules\Webhooks
  */
 class WebhookHandler
