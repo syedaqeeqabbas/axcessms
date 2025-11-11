@@ -5,8 +5,6 @@ Laravel package for seamless integration with Axcess Merchant Services Payment G
 
 A Laravel package for **Axcess Merchant Services** (AxcessMS) — enabling seamless integration with Copy & Pay, Server-to-Server, and Scheduling APIs.
 
---
-
 ## 🚀 Features
 
 - ✅ Modular architecture (`CopyAndPay`, `ServerToServer`, `Scheduling`, `Webhook`)
@@ -14,8 +12,6 @@ A Laravel package for **Axcess Merchant Services** (AxcessMS) — enabling seaml
 - ⚙️ Sandbox & production environments
 - 🧩 Service provider, config file & facade for Laravel
 - 💳 Easy checkout, payment, and subscription scheduling APIs
-
---
 
 ## 📦 Installation
 
