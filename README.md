@@ -5,7 +5,7 @@ Laravel package for seamless integration with Axcess Merchant Services Payment G
 
 A Laravel package for **Axcess Merchant Services** (AxcessMS) — enabling seamless integration with Copy & Pay, Server-to-Server, and Scheduling APIs.
 
-## 🚀 Features
+## Features
 
 - ✅ Modular architecture (`CopyAndPay`, `ServerToServer`, `Scheduling`, `Webhook`)
 - 🔐 Secure webhook encryption support
@@ -13,10 +13,29 @@ A Laravel package for **Axcess Merchant Services** (AxcessMS) — enabling seaml
 - 🧩 Service provider, config file & facade for Laravel
 - 💳 Easy checkout, payment, and subscription scheduling APIs
 
-## 📦 Installation
+## Installation
 
 Use composer to manage your dependencies.
 
 ```bash
 composer require syedaqeeqabbas/axcessms
+```
+
+Publish the configuration:
+
+```bash
+php artisan vendor:publish --tag=axcessms
+```
+
+Add credentials in your `.env` file:
+
+```bash
+AXCESSMS_BASE_URL=https://api.axcessms.com
+AXCESSMS_ENTITY_ID=YOUR_ENTITY_ID
+AXCESSMS_ACCESS_TOKEN=YOUR_ACCESS_TOKEN
+AXCESSMS_TEST_MODE=true
+AXCESSMS_ENVIRONMENT=production // use sandbox for development or testing
+AXCESSMS_ENTITY_ID=YOUR_ENTITY_ID
+AXCESSMS_ACCESS_TOKEN=YOUR_ACCESS_TOKEN==
+AXCESSMS_ENCRYPTION_KEY=YOUR_ENCRYPTION_KEY_FOR_WEBHOOK
 ```
