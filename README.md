@@ -46,11 +46,10 @@ Once the checkout session is created, the API response provides a unique `checko
 
 This `checkoutId` is then passed to the view, where it is used to render the Copy and Pay payment widget (e.g., for VISA, MasterCard, or other supported brands).
 
+For single or one time payment checkout using Facade:
 
 ```php
 use Axcessms;
-
-// For single or one time payment using Facade
 
 $checkout = Axcessms::copyAndPay()->singlePaymentCheckout([
 	            'amount' => 19.99,
@@ -58,15 +57,25 @@ $checkout = Axcessms::copyAndPay()->singlePaymentCheckout([
 	            'merchantTransactionId' => rand(10000, 99999), // Replace it with real unique Order ID or Checkout ID
 	        ]); 
 
-// For single or one time payment using helper
+return view('checkout')->with(['checkoutId' => $checkout['id']]);
+```
 
+For single or one time payment checkout using helper:
+
+```php
 $checkout = copyAndPay()->singlePaymentCheckout([
 	            'amount' => 19.99,
 	            'currency' => 'GBP',
 	            'merchantTransactionId' => rand(10000, 99999), // Replace it with real unique Order ID or Checkout ID
 	        ]);
 
-// For schedule or recurring payment using Facade
+return view('checkout')->with(['checkoutId' => $checkout['id']]);
+```
+
+For schedule or recurring payment checkout using Facade:
+
+```php
+use Axcessms;
 
 $checkout = Axcessms::copyAndPay()->schedulePaymentCheckout([
 	            'amount' => 19.99,
@@ -74,8 +83,12 @@ $checkout = Axcessms::copyAndPay()->schedulePaymentCheckout([
 	            'merchantTransactionId' => rand(10000, 99999), // Replace it with real unique Order ID or Checkout ID
 	        ]); 
 
-// For schedule or recurring payment using helper
+return view('checkout')->with(['checkoutId' => $checkout['id']]);
+```
 
+For schedule or recurring payment checkout using helper:
+
+```php
 $checkout = copyAndPay()->schedulePaymentCheckout([
 	            'amount' => 19.99,
 	            'currency' => 'GBP',
@@ -89,7 +102,9 @@ Frontend:
 
 ```html
 <form action="/payment/result" class="paymentWidgets" data-brands="VISA MASTER AMEX"></form>
+
 <script src="{{ Axcessms::config()->baseUrl() }}/v1/paymentWidgets.js?checkoutId={{ $checkoutId }}" crossorigin="anonymous"></script>
+
 <script>
     var wpwlOptions = {
         billingAddress: {},
@@ -104,7 +119,7 @@ Check Payment Status:
 ```php
 // Inside of your Controller on /payment/result route
 
-$response = Axcessms::copyAndPay()->status(request()->resourcePath);
+$response = Axcessms::copyAndPay()->status();
 
 if ($response['status'])
 {

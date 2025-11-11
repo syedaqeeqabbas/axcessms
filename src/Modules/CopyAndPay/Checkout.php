@@ -38,16 +38,22 @@ class Checkout
      * This method checks whether a given checkout or payment resource
      * was successfully processed or is still pending.
      *
-     * @param  string  $resourcePath  The resource path returned by AxcessMS (e.g., `/v1/checkouts/{id}/payment`).
      * @return array                  Returns an associative array containing:
      *                                - `status` (bool): Whether the request was successful.
      *                                - `data` (array):  The response data if successful.
      *                                - `message` (string): Error message if failed.
      */
-    public function status(string $resourcePath): array
+    public function status(): array
     {
+        if (empty(request()->resourcePath))
+        {
+            return [
+                'status'  => false
+            ];
+        }
+
         try {
-            $response = Http::get($this->config->baseUrl() . $resourcePath);
+            $response = Http::get($this->config->baseUrl() . request()->resourcePath);
 
             if ($response->successful() && $this->statusHandler->validate($response->json()['result']['code'])) {
                 return [
