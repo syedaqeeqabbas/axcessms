@@ -1,6 +1,3 @@
-# axcessms
-Laravel package for seamless integration with Axcess Merchant Services Payment Gateway.
-
 # AxcessMS Laravel SDK
 
 A Laravel package for **Axcess Merchant Services** (AxcessMS) — enabling seamless integration with Copy & Pay, Server-to-Server, and Scheduling APIs.
