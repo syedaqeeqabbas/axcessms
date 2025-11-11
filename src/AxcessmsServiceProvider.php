@@ -54,6 +54,11 @@ class AxcessmsServiceProvider extends ServiceProvider
             'axcessms'
         );
 
+        if (file_exists(__DIR__ . '/Support/helpers.php'))
+        {
+            require_once __DIR__ . '/Support/helpers.php';
+        }
+
         $this->app->singleton('axcessms', function () {
             $config = new AxcessmsConfig(
                 config('axcessms.entity_id'),
@@ -62,6 +67,18 @@ class AxcessmsServiceProvider extends ServiceProvider
                 config('axcessms.encryption_key')
             );
 
+            return new AxcessmsClient($config);
+        });
+
+        $this->app->singleton(AxcessmsClient::class, function ($app) {
+
+            $config = new AxcessmsConfig(
+                config('axcessms.entity_id'),
+                config('axcessms.access_token'),
+                config('axcessms.environment'),
+                config('axcessms.encryption_key')
+            );
+            
             return new AxcessmsClient($config);
         });
     }

@@ -29,7 +29,10 @@
     "autoload": {
         "psr-4": {
             "SyedAqeeqAbbas\\Axcessms\\": "src/"
-        }
+        },
+        "files": [
+            "src/Support/helpers.php"
+        ]
     },
     "extra": {
         "laravel": {
