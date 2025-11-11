@@ -21,7 +21,7 @@ Use composer to manage your dependencies.
 composer require syedaqeeqabbas/axcessms
 ```
 
-Publish the configuration:
+Publish the configuration (Optional):
 
 ```bash
 php artisan vendor:publish --tag=axcessms
