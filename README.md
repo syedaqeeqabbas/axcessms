@@ -60,7 +60,7 @@ serverToServer();             // Helper
 ✅ Use Facade if you prefer explicit imports
 ✅ Use Helper for cleaner controllers & routes
 
-For single or one time payment checkout:
+#### For single or one time payment checkout:
 
 ```php
 $checkout = copyAndPay()->singlePaymentCheckout([
@@ -72,7 +72,7 @@ $checkout = copyAndPay()->singlePaymentCheckout([
 return view('checkout')->with(['checkoutId' => $checkout['id']]);
 ```
 
-For schedule or recurring payment checkout:
+#### For schedule or recurring payment checkout:
 
 ```php
 $checkout = copyAndPay()->schedulePaymentCheckout([
@@ -84,7 +84,7 @@ $checkout = copyAndPay()->schedulePaymentCheckout([
 return view('checkout')->with(['checkoutId' => $checkout['id']]);
 ```
 
-Frontend:
+#### Frontend:
 
 ```html
 <form action="/payment/result" class="paymentWidgets" data-brands="VISA MASTER AMEX"></form>
@@ -100,7 +100,7 @@ Frontend:
 </script>
 ```
 
-Check Payment Status:
+#### Check Payment Status:
 
 ```php
 // Inside of your Controller on /payment/result route
@@ -184,4 +184,76 @@ else
 {
 	// Payment failed
 }
+```
+
+#### Manage bank receipt confirmations:
+
+```php
+
+$params = [
+    'amount'   => 92,
+    'currency' => 'GBP',
+];
+
+$payment = serverToServer()->receipt($params, 'PAYMENT_ID_FROM_AXCESSMS');
+```
+
+#### Capture the payment:
+
+```php
+
+$params = [
+    'amount'   => 92,
+    'currency' => 'GBP',
+];
+
+$payment = serverToServer()->capture($params, 'PAYMENT_ID_FROM_AXCESSMS');
+```
+
+#### Refund either the full captured amount or a part of the captured amount:
+
+```php
+
+$params = [
+    'amount'   => 90.50,
+    'currency' => 'GBP',
+];
+
+$payment = serverToServer()->refund($params, 'PAYMENT_ID_FROM_AXCESSMS');
+```
+
+#### Rebill the processed order for additional products:
+
+```php
+
+$params = [
+    'amount'   => 90.50,
+    'currency' => 'GBP',
+];
+
+$payment = serverToServer()->rebill($params, 'PAYMENT_ID_FROM_AXCESSMS');
+```
+
+#### Reflect the chargeback processed by the bank:
+
+```php
+
+$params = [
+    'amount'   => 90.50,
+    'currency' => 'GBP',
+];
+
+$payment = serverToServer()->chargeBack($params, 'PAYMENT_ID_FROM_AXCESSMS');
+```
+
+#### Reflect the chargeback reversal processed by the bank:
+
+```php
+
+$params = [
+    'amount'   => 90.50,
+    'currency' => 'GBP',
+];
+
+$payment = serverToServer()->chargeBackReversal($params, 'PAYMENT_ID_FROM_AXCESSMS');
 ```
