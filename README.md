@@ -123,7 +123,7 @@ Use this mode when you want full control on your backend without using the Copy 
 
 Exact parameters depend on your AxcessMS account and API documentation. The SDK sends them through as you provide.
 
-Create Pre-authorize payment:
+#### Create Pre-authorize payment:
 
 ```php
 
@@ -149,7 +149,7 @@ $payment = serverToServer()->preAuthorizePayment([
 ]);
 ```
 
-Perform debit payment:
+#### Perform debit payment:
 
 ```php
 
@@ -170,7 +170,7 @@ $payment = serverToServer()->debitPayment([
 ]);
 ```
 
-Manage the payment:
+#### Manage the payment:
 
 ```php
 
