@@ -57,8 +57,8 @@ Axcessms::serverToServer();   // Facade
 serverToServer();             // Helper
 ```
 
-✅ Use Facade if you prefer explicit imports
-✅ Use Helper for cleaner controllers & routes
+- ✅ Use Facade if you prefer explicit imports
+- ✅ Use Helper for cleaner controllers & routes
 
 #### For single or one time payment checkout:
 
@@ -195,7 +195,7 @@ $params = [
     'currency' => 'GBP',
 ];
 
-$payment = serverToServer()->receipt($params, 'PAYMENT_ID_FROM_AXCESSMS');
+$response = serverToServer()->receipt($params, 'PAYMENT_ID_FROM_AXCESSMS');
 ```
 
 #### Capture the payment:
@@ -207,7 +207,7 @@ $params = [
     'currency' => 'GBP',
 ];
 
-$payment = serverToServer()->capture($params, 'PAYMENT_ID_FROM_AXCESSMS');
+$response = serverToServer()->capture($params, 'PAYMENT_ID_FROM_AXCESSMS');
 ```
 
 #### Refund either the full captured amount or a part of the captured amount:
@@ -219,7 +219,7 @@ $params = [
     'currency' => 'GBP',
 ];
 
-$payment = serverToServer()->refund($params, 'PAYMENT_ID_FROM_AXCESSMS');
+$response = serverToServer()->refund($params, 'PAYMENT_ID_FROM_AXCESSMS');
 ```
 
 #### Rebill the processed order for additional products:
@@ -231,7 +231,7 @@ $params = [
     'currency' => 'GBP',
 ];
 
-$payment = serverToServer()->rebill($params, 'PAYMENT_ID_FROM_AXCESSMS');
+$response = serverToServer()->rebill($params, 'PAYMENT_ID_FROM_AXCESSMS');
 ```
 
 #### Reflect the chargeback processed by the bank:
@@ -243,7 +243,7 @@ $params = [
     'currency' => 'GBP',
 ];
 
-$payment = serverToServer()->chargeBack($params, 'PAYMENT_ID_FROM_AXCESSMS');
+$response = serverToServer()->chargeBack($params, 'PAYMENT_ID_FROM_AXCESSMS');
 ```
 
 #### Reflect the chargeback reversal processed by the bank:
@@ -255,5 +255,81 @@ $params = [
     'currency' => 'GBP',
 ];
 
-$payment = serverToServer()->chargeBackReversal($params, 'PAYMENT_ID_FROM_AXCESSMS');
+$response = serverToServer()->chargeBackReversal($params, 'PAYMENT_ID_FROM_AXCESSMS');
+```
+
+### 3️⃣ Scheduling API
+
+While `schedulePaymentCheckout()` creates a schedule via Copy & Pay, the Scheduling module is for managing schedules entirely from backend.
+
+```php
+
+use Axcessms;
+
+$schedule = Axcessms::scheduler()->schedule([
+    'amount' => 65,
+    'currency' => 'GBP',
+    'registrationId' => '8ac7a***********************',
+    'job.startDate' => date('Y-m-d', strtotime('+1 days')) . ' 00:01:00',
+    'job.dayOfWeek' => '2,3,4,5,6',
+    'job.hour' => 18,
+    'job.minute' => 10,
+    'job.endDate' => date('Y-m-d', strtotime('+10 days')) . ' 00:01:00',
+]);
+
+// Handle $schedule['id'] etc.
+```
+
+#### Cancel a Schedule:
+
+```php
+
+use Axcessms;
+
+$response = Axcessms::scheduler()->cancel('SCHEDULE_ID_FROM_AXCESSMS');
+```
+
+### 4️⃣ Webhooks
+
+AxcessMS can send asynchronous notifications (e.g. payment result, chargebacks, schedule events) to your application.
+
+This package provides a helper to decrypt and validate webhook payloads using `AXCESSMS_ENCRYPTION_KEY`.
+
+The SDK automatically:
+- Validates headers
+- Decrypts payload (AES-256-GCM)
+- Parses JSON
+- Exposes clean payload data
+
+#### Defining the Route:
+
+In `routes/web.php` or `routes/api.php`:
+
+```php
+
+use App\Http\Controllers\AxcessmsWebhookController;
+
+Route::post('/axcessms/webhook', [AxcessmsWebhookController::class, 'handle'])
+    ->name('axcessms.webhook');
+```
+
+#### Controller Example:
+
+```php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Axcessms;
+
+class AxcessmsWebhookController extends Controller
+{
+    public function handle(Request $request)
+    {
+        return Axcessms::webhook()->handle($request, function ($payload) {
+            // $payload is already decrypted & verified
+            \Log::info('AxcessMS Webhook', $payload);
+        });
+    }
+}
 ```
