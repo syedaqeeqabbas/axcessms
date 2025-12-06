@@ -43,21 +43,24 @@ Once the checkout session is created, the API response provides a unique `checko
 
 This `checkoutId` is then passed to the view, where it is used to render the Copy and Pay payment widget (e.g., for VISA, MasterCard, or other supported brands).
 
-For single or one time payment checkout using Facade:
+Facade vs Helper (Quick Reference)
+
+Both styles resolve to the same underlying service.
 
 ```php
 use Axcessms;
 
-$checkout = Axcessms::copyAndPay()->singlePaymentCheckout([
-	            'amount' => 19.99,
-	            'currency' => 'GBP',
-	            'merchantTransactionId' => rand(10000, 99999), // Replace it with real unique Order ID or Checkout ID
-	        ]); 
+Axcessms::copyAndPay();   // Facade
+copyAndPay();             // Helper
 
-return view('checkout')->with(['checkoutId' => $checkout['id']]);
+Axcessms::serverToServer();   // Facade
+serverToServer();             // Helper
 ```
 
-For single or one time payment checkout using helper:
+✅ Use Facade if you prefer explicit imports
+✅ Use Helper for cleaner controllers & routes
+
+For single or one time payment checkout:
 
 ```php
 $checkout = copyAndPay()->singlePaymentCheckout([
@@ -69,21 +72,7 @@ $checkout = copyAndPay()->singlePaymentCheckout([
 return view('checkout')->with(['checkoutId' => $checkout['id']]);
 ```
 
-For schedule or recurring payment checkout using Facade:
-
-```php
-use Axcessms;
-
-$checkout = Axcessms::copyAndPay()->schedulePaymentCheckout([
-	            'amount' => 19.99,
-	            'currency' => 'GBP',
-	            'merchantTransactionId' => rand(10000, 99999), // Replace it with real unique Order ID or Checkout ID
-	        ]); 
-
-return view('checkout')->with(['checkoutId' => $checkout['id']]);
-```
-
-For schedule or recurring payment checkout using helper:
+For schedule or recurring payment checkout:
 
 ```php
 $checkout = copyAndPay()->schedulePaymentCheckout([
@@ -116,7 +105,76 @@ Check Payment Status:
 ```php
 // Inside of your Controller on /payment/result route
 
-$response = Axcessms::copyAndPay()->status();
+$response = copyAndPay()->status();
+
+if ($response['status'])
+{
+	// Payment successfull
+}
+else
+{
+	// Payment failed
+}
+```
+
+### 2️⃣ Server-to-Server
+
+Use this mode when you want full control on your backend without using the Copy & Pay widget, or for operations like capturing, voiding, or refunding payments.
+
+Exact parameters depend on your AxcessMS account and API documentation. The SDK sends them through as you provide.
+
+Create Pre-authorize payment:
+
+```php
+
+$payment = serverToServer()->preAuthorizePayment([
+    'amount'          => 92,
+    'currency'        => 'GBP',
+    'paymentBrand'    => 'VISA',
+    'card.number'     => '4200000000000000',
+    'card.holder'     => 'Jane Jones',
+    'card.expiryMonth'=> '05',
+    'card.expiryYear' => '2034',
+    'card.cvv'        => '123',
+    'customer.givenName'     => 'Jane',
+    'customer.surname'     => 'Jones',
+    'customer.email'     => 'info@example.com',
+    'customer.phone'     => '0123456789',
+    'customer.browser.acceptHeader' => '3D Secure v2',
+    'customer.browser.language' => 'english',
+    'customer.browser.screenHeight' => '700',
+    'customer.browser.screenWidth' => '1028',
+    'customer.browser.userAgent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36',
+    'customer.browser.javaEnabled' => 'true',
+]);
+```
+
+Perform debit payment:
+
+```php
+
+$payment = serverToServer()->debitPayment([
+    'amount'          => 92,
+    'currency'        => 'GBP',
+    'paymentBrand'    => 'VISA',
+    'card.number'     => '4200000000000000',
+    'card.holder'     => 'Jane Jones',
+    'card.expiryMonth'=> '05',
+    'card.expiryYear' => '2034',
+    'card.cvv'        => '123',
+    'customer.givenName'     => 'Jane',
+    'customer.surname'     => 'Jones',
+    'customer.email'     => 'info@example.com',
+    'customer.phone'     => '0123456789',
+    'customer.ip' => '59.103.124.217',
+]);
+```
+
+Manage the payment:
+
+```php
+
+$response = serverToServer()->status('PAYMENT_ID_FROM_AXCESSMS');
 
 if ($response['status'])
 {
